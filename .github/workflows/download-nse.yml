@@ -39,7 +39,7 @@ jobs:
     
     - name: Download NSE Data
       run: |
-        python .github/workflows/nse.py
+        python .github/workflows/download_script.py
     
     - name: Commit and push files
       run: |
