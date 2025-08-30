@@ -3,7 +3,7 @@ name: Download NSE Pre-Open Data
 on:
   schedule:
     # Runs at 4:00 AM UTC (9:30 AM IST) on weekdays
-    - cron: '00 04 * * 1-5'
+    - cron: '0 4 * * 1-5'
   workflow_dispatch: # Allows manual trigger
 
 jobs:
@@ -18,18 +18,20 @@ jobs:
       with:
         python-version: '3.9'
     
-    - name: Install Chrome
+    - name: Install Chromium (for Selenium)
       run: |
         sudo apt-get update
-        sudo apt-get install -y google-chrome-stable
+        sudo apt-get install -y chromium-browser chromium-chromedriver
     
     - name: Install dependencies
       run: |
-        pip install requests selenium webdriver-manager pandas schedule
+        pip install requests selenium webdriver-manager pandas
     
-    - name: Download NSE Data
-      run: |
-        python .github/workflows/nse.py
+    - name: Ensure downloads folder exists
+      run: mkdir -p downloads
+    
+    - name: Run NSE Data Downloader
+      run: python nse.py
     
     - name: Commit and push files
       run: |
