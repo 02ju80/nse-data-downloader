@@ -1,0 +1,40 @@
+name: Download NSE Pre-Open Data
+
+on:
+  schedule:
+    # Runs at 4:00 AM UTC (9:30 AM IST) on weekdays
+    - cron: '00 04 * * 1-5'
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install Chrome
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y google-chrome-stable
+    
+    - name: Install dependencies
+      run: |
+        pip install requests selenium webdriver-manager pandas schedule
+    
+    - name: Download NSE Data
+      run: |
+        python download_script.py
+    
+    - name: Commit and push files
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add downloads/
+        git commit -m "Auto-download NSE data $(date)" || exit 0
+        git push
