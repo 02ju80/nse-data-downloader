@@ -13,7 +13,7 @@ import time
 def is_trading_day():
     """Check if today is a trading day (Monday-Friday)"""
     today = date.today()
-    return today.weekday() < 6
+    return today.weekday() < 5
 
 def download_nse_data():
     """Download NSE pre-open market data"""
